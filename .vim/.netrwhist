@@ -1,0 +1,12 @@
+let g:netrw_dirhistmax  =10
+let g:netrw_dirhistcnt =3
+let g:netrw_dirhist_3='/Users/harshavardhanreddyb/.zshconf/zsh-autosuggestions'
+let g:netrw_dirhist_2='/Users/harshavardhanreddyb/.zshconf'
+let g:netrw_dirhist_1='/private/var/root/Library/Caches/GeoServices'
+let g:netrw_dirhist_0='/private/var/root/Library/Caches'
+let g:netrw_dirhist_9='/private/var/root/Library'
+let g:netrw_dirhist_8='/private/var/root/Library/Audio'
+let g:netrw_dirhist_7='/private/var/root/Library'
+let g:netrw_dirhist_6='/private/var/root'
+let g:netrw_dirhist_5='/private/var/root/Documents'
+let g:netrw_dirhist_4='/private/var/root'
