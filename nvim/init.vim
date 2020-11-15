@@ -1,6 +1,5 @@
 "Sourcing other plugin configurations
 source $HOME/.config/nvim/plug-config/coc.vim
-source $HOME/.config/nvim/plug-config/floatterm.vim
 
 set nocompatible
 set nu
@@ -50,9 +49,6 @@ Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 
-"file explorer nerdtree
-Plug 'preservim/nerdtree'
-
 Plug 'gruvbox-community/gruvbox'
 
 "Airline
@@ -68,9 +64,12 @@ Plug 'voldikss/vim-floaterm'
 call plug#end()
 
 colorscheme gruvbox
+let g:gruvbox_contrast_dark = "hard"
 set background=dark
 set termguicolors
 let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#coc#enabled = 1
+let g:airline_powerline_fonts = 1
 
 "leader set to space
 let mapleader=" "
@@ -96,31 +95,11 @@ set clipboard=unnamed
 set t_Co=256
 set cursorline
 
-"copied from primeagen 
-
-" --- vim go (polyglot) settings.
-let g:go_highlight_build_constraints = 1
-let g:go_highlight_extra_types = 1
-let g:go_highlight_fields = 1
-let g:go_highlight_functions = 1
-let g:go_highlight_methods = 1
-let g:go_highlight_operators = 1
-let g:go_highlight_structs = 1
-let g:go_highlight_types = 1
-let g:go_highlight_function_parameters = 1
-let g:go_highlight_function_calls = 1
-let g:go_highlight_generate_tags = 1
-let g:go_highlight_format_strings = 1
-let g:go_highlight_variable_declarations = 1
-let g:go_auto_sameids = 1
-
 "split widow resizin:
 nnoremap + :vertical resize +5<CR>
 nnoremap _ :vertical resize -5<CR>
 nnoremap <F10> :resize -5<CR>
 nnoremap <F9> :resize +5<CR>
-
-
 
 "just to trim all the unnecessary whitespace
 fun! TrimWhitespace()
@@ -128,11 +107,6 @@ fun! TrimWhitespace()
     keeppatterns %s/\s\+$//e
     call winrestview(l:save)
 endfun
-
-"nerdtree toggle
-nnoremap <leader>n :NERDTreeToggle<CR>
-"to close nerd tree if there is no buffer open
-autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 
 " Enable per-command history.
 " CTRL-N and CTRL-P will be automatically bound to next-history and
@@ -182,29 +156,6 @@ command! -bang -nargs=* Rg
   \   'rg --column --line-number --no-heading --color=always --smart-case '.shellescape(<q-args>), 1,
   \   fzf#vim#with_preview(), <bang>0)
 
-"" Ripgrep advanced
-"function! RipgrepFzf(query, fullscreen)
-  "let command_fmt = 'rg --column --line-number --no-heading --color=always --smart-case %s || true'
-  "let initial_command = printf(command_fmt, shellescape(a:query))
-  "let reload_command = printf(command_fmt, '{q}')
-  "let spec = {'options': ['--phony', '--query', a:query, '--bind', 'change:reload:'.reload_command]}
-  "call fzf#vim#grep(initial_command, 1, fzf#vim#with_preview(spec), a:fullscreen)
-"endfunction
-
-"command! -nargs=* -bang RG call RipgrepFzf(<q-args>, <bang>0)
-
-" Git grep
-command! -bang -nargs=* GGrep
-  \ call fzf#vim#grep(
-  \   'git grep --line-number '.shellescape(<q-args>), 0,
-  \   fzf#vim#with_preview({'dir': systemlist('git rev-parse --show-toplevel')[0]}), <bang>0)
-
-
-"open nerdtree if the opened file is a directory
-autocmd StdinReadPre * let s:std_in=1
-autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists("s:std_in") | exe 'NERDTree' argv()[0] | wincmd p | ene | exe 'cd '.argv()[0] | endif
-
-
 "just defining how the comment should be in json
  autocmd FileType json syntax match Comment +\/\/.\+$+
 
@@ -213,3 +164,32 @@ autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists("s:std_in
 augroup auto_spellcheck
   autocmd BufNewFile,BufRead *.md *.txt setlocal spell
 augroup END
+
+
+"floaterm config
+nnoremap <leader>h :FloatermNew<CR>
+"To open as a pop up
+" Floaterm
+let g:floaterm_autoinsert=1
+let g:floaterm_width=0.8
+let g:floaterm_height=0.8
+let g:floaterm_wintitle=0
+let g:floaterm_autoclose=1
+
+nnoremap <leader>hh :FloatermNew --wintype=normal --height=12<CR>
+
+"To open terminal from the bottom
+
+tnoremap <C-q><C-q> <C-\><C-n>:q<CR>
+"To exit from the floatterm, I mean to close the term buffer 
+
+tnoremap <C-q> <C-\><C-n>
+"To exit terminal mode 
+
+"buffer management
+nnoremap <leader>bb :bnext<CR>
+nnoremap <leader>bn :bprevious<CR>
+nnoremap <leader>bk :bp\|bd # <CR>
+
+"Coc-Explorer
+nnoremap <space>oe :CocCommand explorer<CR>
